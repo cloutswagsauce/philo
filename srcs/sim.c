@@ -6,7 +6,7 @@
 /*   By: lfaria-m <lfaria-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 10:12:16 by lfaria-m          #+#    #+#             */
-/*   Updated: 2024/12/25 19:23:47 by lfaria-m         ###   ########.fr       */
+/*   Updated: 2024/12/25 19:38:56 by lfaria-m         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -21,7 +21,7 @@ int	case_even(t_philo philo, t_simulation *sim)
 	start_time = get_time_in_ms();
 	pthread_mutex_lock(&sim->forks[philo.id % sim->num_of_philos]);
 	pthread_mutex_lock(&sim->print_lock);
-	printf("%ld philosopher: %d has taken right fork \n", get_time_in_ms(), philo.id);
+	printf("%ld philosopher: %d has taken right fork \n", get_relative_time(philo), philo.id);
 	pthread_mutex_unlock(&sim->print_lock);
 	while (pthread_mutex_lock(&sim->forks[philo.id - 1]) != 0)
 	{
@@ -32,7 +32,7 @@ int	case_even(t_philo philo, t_simulation *sim)
 		}
 	}
 	pthread_mutex_lock(&sim->print_lock);
-	printf("%ld philosopher: %d has taken left fork \n", get_time_in_ms(), philo.id);
+	printf("%ld philosopher: %d has taken left fork \n", get_relative_time(philo), philo.id);
 	pthread_mutex_unlock(&sim->print_lock);
 	return (1);
 }
@@ -46,7 +46,7 @@ int	case_odd(t_philo philo, t_simulation *sim)
 	start_time = get_time_in_ms();
 	pthread_mutex_lock(&sim->forks[philo.id - 1]);
 	pthread_mutex_lock(&sim->print_lock);
-	printf("%ld philosopher: %d has taken left fork \n", get_time_in_ms(), philo.id);
+	printf("%ld philosopher: %d has taken left fork \n", get_relative_time(philo), philo.id);
 	pthread_mutex_unlock(&sim->print_lock);
 	while (pthread_mutex_lock(&sim->forks[philo.id % sim->num_of_philos]))
 	{
@@ -57,7 +57,7 @@ int	case_odd(t_philo philo, t_simulation *sim)
 		}
 	}
 	pthread_mutex_lock(&sim->print_lock);
-	printf("%ld philosopher: %d has taken right fork \n", get_time_in_ms(), philo.id);
+	printf("%ld philosopher: %d has taken right fork \n", get_relative_time(philo), philo.id);
 	pthread_mutex_unlock(&sim->print_lock);
 	return (1);
 }
@@ -65,7 +65,7 @@ int	case_odd(t_philo philo, t_simulation *sim)
 void	eat(t_philo *philo, t_simulation *sim)
 {
 	pthread_mutex_lock(&sim->print_lock); // locks printing
-	printf("%ld philosopher: %d is eating, has eaten %d times \n", get_time_in_ms(), philo->id, philo->meals_eaten);
+	printf("%ld philosopher: %d is eating, has eaten %d times \n", get_relative_time(*philo), philo->id, philo->meals_eaten);
 	usleep(sim->time_to_eat * 1000);
 	// converts ms to micro, sleeps for that time
 	pthread_mutex_unlock(&sim->print_lock);

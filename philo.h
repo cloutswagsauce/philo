@@ -47,6 +47,7 @@ void	think(t_philo *philo,  t_simulation *sim);
 void	philo_sleep(t_philo *philo,  t_simulation *sim);
 void	think(t_philo *philo,  t_simulation *sim);
 void	philo_sleep(t_philo *philo,  t_simulation *sim);
+long	get_relative_time(t_philo philo);
 #endif
 
 
